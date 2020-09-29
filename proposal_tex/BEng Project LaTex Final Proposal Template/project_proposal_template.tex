@@ -1,0 +1,163 @@
+
+%%%%%%%%%%%   READ COMMENTS IN RED FOR HELP    %%%%%%%%%%%%%%%%%%%%
+
+% For more information use the following link:  https://www.merry.io/courses/learning-latex/
+
+%LaTex dissociates text and equation symbols. To write equations refer to the following link: https://en.wikibooks.org/wiki/LaTeX/Mathematics
+
+% The documentclass determines the type of document you are going to write
+\documentclass[ a4paper, 12pt, oneside ]{article} %A4 layout, font 12 points, text is in one column
+
+% Math packages to do equations, tables and figures
+\usepackage{mathptmx}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amsbsy}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage[svgnames]{xcolor} % Enabling colors by their 'svgnames'
+
+% Language
+\usepackage[english]{babel} 
+\usepackage{mathpazo} % Palatino font
+
+% Figure captions
+\usepackage[font={small,it}]{caption}
+
+% enumeration
+\usepackage{enumerate}
+
+% Depth of the table of contents
+\setcounter{tocdepth}{2}
+
+% footnotes at the bottom of the page
+\usepackage[bottom]{footmisc} 
+
+%%%%%%%%% PAGES %%%%%%%%%%%%%%
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{3D Feature Model of the Neonate’s Lung with Apnea}
+\fancyhead[RE,LO]{Final Report}
+\fancyfoot[CE,CO]{\leftmark}
+\fancyfoot[LE,RO]{\thepage}
+
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{1pt}
+
+% Begin the document
+\begin{document} %The document begins here
+
+% If this is an BEng project.
+\include{BEng_title_settings} % This command includes whatever is in the document title_settings.tex
+
+% Start the Table of Contents on a new page
+\newpage %create a new page
+
+\tableofcontents %Add a table of content
+
+\newpage
+
+%%%%% Abstract
+\abstract{This is the most important paragraph in the entire proposal. It is a snapshot of the proposed work. It is a concise summary of what is intended to be accomplished and gives a short indication of what has appeared in the literature before you start your work. Keep it about 300 words (under one page). The Abstract is written last, after the entire proposal has been written. Use the funnel approach: Make a general statement about the topic; then say something about what is missing from the past and current research or current theory or whatever (his is a very brief historical review in just a couple of sentences); let the reader know what you intend to do to fix that; lastly, indicate your major result(s).
+
+% Write your abstract here between the brackets
+% Summarise your objectives
+% Summarise your Approach here
+% Summarise your main result here
+% Summarise the significance of your results here
+
+%%%%% Sections
+\section{Introduction} %Section creates sections starting from 1
+\label{introduction} %You can refer to a label anywhere in the text and the reader will be directed to the label, no matter how the paper changes.\cite{ELEC0036_PP_2020}
+Obstructive Sleeping Apnea (OSA) is a common breathing disorder during sleep. It is characterized by recurrent episodes of complete or partial obstruction of the upper airway leading to reduced or absent breathing during sleep. OSA presents in 5\% of adults and 1\% of children in developed countries and it is an independent risk factor for diabetes, hypertension, myocardial infarction, and stroke. In addition, OSA in infants has been associated with failure to thrive, behavioural deficits, and sudden infant death.\citation{Katz ES, Mitchell RB, D'Ambrosio CM. Obstructive sleep apnea in infants. Am J Respir Crit Care Med. 2012;185(8):805-816. doi:10.1164/rccm.201108-1455CI}
+In clinical diagnosis, the severity of OSA is indicated by Apnea–Hypopnoea Index (AHI). It is represented by the number of apnea and hypopnea events per hour of sleep where the apnea must last for at least 10 seconds and be associated with a decrease in blood oxygenation. For children, an AHI larger than one will be considered abnormal. Typically, polysomnography (PSG) is the most commonly used way for collecting data to detect the AHI and help for diagnosis. It records variant signals, including EEG, ECG, and SaO2 . There have been previous studies about auto-diagnosing the OSA from PSG signals such as [ ], from single-lead ECG like the research in [ ], or from SaO2 and other parameters like the research in [ ].
+Beyond that, Electrical impedance tomography (EIT) is widely used for disease diagnosis, especially lung cancer and adenocarcinoma. There are many studies building models from EIT data of lung, like [ ] and [ ]. Since EIT performs well in building images for lung, it can also be used to monitor the OSA. 
+Machine learning in 3D image analysis is a popular topic in the past few years. Segmentation of the images and auto-diagnosis of the diseases are the main topics. Many useful algorithms are studied, such as convolutional neural networks (CNN) reviewed in [xii] and the use of decision tree in [ ]. Based on previous researches, in this project, 3D images from EIT are used in machine learning to build the model.
+
+\begin{enumerate}
+\item{ Writing Hints:
+\verb*|\emph{}| emphasises the word in brackets}
+% \underline{} underlines the word in the brackets
+% textbf{} for a bold font
+% To include symbols such as & and % write them as follow: \% and \&
+
+\item{ Figures:
+To add a figure use the following lines by including the file name in includegraphics 
+Give a reference name inside \label{} brackets so you can refer automatically to the figure's number by using the function \verb*|\ref{name}|. You can use the same functions to refer to a section, using \verb*|\label{name}| to label something.
+
+\begin{verbatim}
+\begin{figure}[H] 
+\centering
+\includegraphics[width=\textwidth]{name of the file} 
+\caption{title of the figure}
+\label{give a reference name}
+\end{figure}
+\end{verbatim}
+}
+
+\item{Subsections: 
+\verb*|\subsection{title}| creates a sub-section such as 1.1 and \verb*|\subsubsection{title}| creates a sub-sub-section such as 1.1.1. For more subsections use the command \verb*|\paragraph{title}|. }
+\item{To cite a reference use the function \begin{verbatim}\cite{Yonge_1856}\end{verbatim} It appears within the text like this: \cite{Yonge_1856} and you will see it in the references later. You need to use a reference management software package such as BibDesk. See the bibliography note below.}
+
+\item{If at any point for some reason your document is not compiling, remove the following file: nameOfPaper.aux}
+
+\item{ Compiling and Layout: When you want to see your references, first compile the reference document (.tex file) using the first item in the popup list in the upper left hand corner of the .text window. You might want to compile it twice to be sure the references are all caught. Then compile the bibtex document (.bib file) using the second item in the popup list of the .tex window. Then compile the LaTex File again. You may also want to compile it several times to avoid any problems such as missing content in the table of contents.}
+
+\item{ You can find more templates at the following link: \\
+https://www.latextemplates.com/}
+\end{enumerate}
+
+\section{Goals and Objectives} \label{goals}
+Your objectives are the most important part of the proposal. Tell the reader what you intend to accomplish; see if you can state the expected outcomes in a clear fashion so that you know, and the reader knows, what you are going to have when finished. What theory will you work out? Or what measurements will you make? Or what circuit will you build? The clearer you are with this, the higher the chances will be for knowing how to get there.
+Break the Objectives down into pieces on which each of your teammates will focus. Show how the individual objectives create the project?s overall end objective.
+ 6/7
+ Once you know what you will be doing, put the steps into a Gantt Chart. Look online for a Gantt Chart description if you need to. Your chart may look like that in fig. \ref{Fig:GanttChart}. Use the Figure environment to insert it (see above).
+
+\begin{figure}[h] 
+\centering
+\includegraphics[width=\textwidth]{SampleGanttChart.png} 
+\caption{This is a sample Gantt Chart. You can find out how to make one on-line.}
+\label{Fig:GanttChart}
+\end{figure} 
+ 
+ % Write here your text
+
+\section{Preliminary Assessment of Risks} 
+\label{sec:RiskAssessment}
+\begin{itemize}
+\item{\textbf{Safety Risks}: Please identify the Laboratories in which you will work. The Managers of these labs MUST approve the assessment forms you have filled in. If you can, try to meet with them and show them the assessments you are planning to post. The forms are available on Moodle.
+
+\textbf{You will not be allowed to start working in any laboratory until your assessment of safety risks is approved by the lab manager.}}
+
+\item{\textbf{Failure Risks}: These are your estimates of the risks you face with your current plan. If you indicate a high risk of failure, that is, something with which you are uncomfortable, you should outline a new plan to use as backup in case the current plan does not work out for you. You can record the details of any alternative plan in your December Interim Report.}
+\end{itemize}
+
+\newpage
+Your Bibliography should appear on this page, if you use BibTex. For example:
+\bibliographystyle{ieeetran} %style of the bibliography. You can look for other styles online
+\bibliography{project_proposal_template} %prints the bibliography by writing its name in the brackets
+
+% For IOS, download BibDesk from the following link: https://bibdesk.sourceforge.io/
+
+%For Windows, Mac or Linux download Mendeley from the following link: https://www.mendeley.com/download-desktop-new?mboxSession=455e210fe7164ae5be72907cf43d80b0&adobe_mc_sdid=SDID%3D1771E6E0BD7935A0-1E92E999E8893227%7CMCORGID%3D4D6368F454EC41940A4C98A6%40AdobeOrg%7CTS%3D1583323671&adobe_mc_ref=https%3A%2F%2Fwww.google.com%2F
+
+%For Windows, Mac or Linux download JabRef from the following link: https://www.jabref.org/
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
