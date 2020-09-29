@@ -5,7 +5,6 @@ cnt = 0
 def readFile(path):
     files = os.listdir(path)
     dsCube = []
-
     for file in files:
         filePath = path + "/" + file
         if os.path.isdir(filePath):
