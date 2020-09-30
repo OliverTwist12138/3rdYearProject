@@ -2,7 +2,6 @@ from pydicom import dcmread
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from PIL import Image
 
 def plot_scan(images):
@@ -17,6 +16,7 @@ def make3D(image, threshold = -400):
     #unknown error with the marching_cubes function(maybe the threshold?)
     #ValueError: Surface level must be within volume data range.
     from skimage import measure
+    from mpl_toolkits.mplot3d.art3d import Poly3DCollection
     verts, faces = measure.marching_cubes(image, threshold)
     fig = plt.figure(figsize=(10, 10))
     ax = fig.add_subplot(111, projection='3d')
