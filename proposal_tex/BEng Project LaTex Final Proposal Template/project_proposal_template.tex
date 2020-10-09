@@ -38,7 +38,7 @@
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[LE,RO]{3D Feature Model of the Neonate’s Lung with Apnea}
+\fancyhead[LE,RO]{NAME OF THE PROJECT}
 \fancyhead[RE,LO]{Final Report}
 \fancyfoot[CE,CO]{\leftmark}
 \fancyfoot[LE,RO]{\thepage}
@@ -70,12 +70,12 @@
 
 %%%%% Sections
 \section{Introduction} %Section creates sections starting from 1
-\label{introduction} %You can refer to a label anywhere in the text and the reader will be directed to the label, no matter how the paper changes.\cite{ELEC0036_PP_2020}
-Obstructive Sleeping Apnea (OSA) is a common breathing disorder during sleep. It is characterized by recurrent episodes of complete or partial obstruction of the upper airway leading to reduced or absent breathing during sleep. OSA presents in 5\% of adults and 1\% of children in developed countries and it is an independent risk factor for diabetes, hypertension, myocardial infarction, and stroke. In addition, OSA in infants has been associated with failure to thrive, behavioural deficits, and sudden infant death.\citation{Katz ES, Mitchell RB, D'Ambrosio CM. Obstructive sleep apnea in infants. Am J Respir Crit Care Med. 2012;185(8):805-816. doi:10.1164/rccm.201108-1455CI}
-In clinical diagnosis, the severity of OSA is indicated by Apnea–Hypopnoea Index (AHI). It is represented by the number of apnea and hypopnea events per hour of sleep where the apnea must last for at least 10 seconds and be associated with a decrease in blood oxygenation. For children, an AHI larger than one will be considered abnormal. Typically, polysomnography (PSG) is the most commonly used way for collecting data to detect the AHI and help for diagnosis. It records variant signals, including EEG, ECG, and SaO2 . There have been previous studies about auto-diagnosing the OSA from PSG signals such as [ ], from single-lead ECG like the research in [ ], or from SaO2 and other parameters like the research in [ ].
-Beyond that, Electrical impedance tomography (EIT) is widely used for disease diagnosis, especially lung cancer and adenocarcinoma. There are many studies building models from EIT data of lung, like [ ] and [ ]. Since EIT performs well in building images for lung, it can also be used to monitor the OSA. 
-Machine learning in 3D image analysis is a popular topic in the past few years. Segmentation of the images and auto-diagnosis of the diseases are the main topics. Many useful algorithms are studied, such as convolutional neural networks (CNN) reviewed in [xii] and the use of decision tree in [ ]. Based on previous researches, in this project, 3D images from EIT are used in machine learning to build the model.
+\label{introduction} %You can refer to a label anywhere in the text and the reader will be directed to the label, no matter how the paper changes.
+Think of the introduction as a development of the context for the reader. Peruse the literature quickly. Highlight the historical progression of the theory and work that has been done, citing the literature as you go. Use the citation mechanisms in the editor you are using. If it is Word, you can use its bibliographic reference tool or Mendeley or another third-party add-on. Use IEEE citing format. After the reader has some idea of what the historical background is, mention what is missing in it that your proposal is going to fill
 
+If you would like to cite something, write this: \cite{ELEC0036_PP_2020}. It has to be in the bibliography. See below. To compile it, you need to compile first the LaTex file, then switch the compiler to BibTex or whatever your reference compiler is and compile, then compile the LaTex file again twice to catch everything.
+
+Here are some hints and ideas for a better paper:
 \begin{enumerate}
 \item{ Writing Hints:
 \verb*|\emph{}| emphasises the word in brackets}
