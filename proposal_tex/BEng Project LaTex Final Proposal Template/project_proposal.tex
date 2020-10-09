@@ -1,0 +1,181 @@
+
+%%%%%%%%%%%   READ COMMENTS IN RED FOR HELP    %%%%%%%%%%%%%%%%%%%%
+
+% For more information use the following link:  https://www.merry.io/courses/learning-latex/
+
+%LaTex dissociates text and equation symbols. To write equations refer to the following link: https://en.wikibooks.org/wiki/LaTeX/Mathematics
+
+% The documentclass determines the type of document you are going to write
+\documentclass[ a4paper, 12pt, oneside ]{article} %A4 layout, font 12 points, text is in one column
+
+% Math packages to do equations, tables and figures
+\usepackage{mathptmx}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amsbsy}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage[svgnames]{xcolor} % Enabling colors by their 'svgnames'
+
+% Language
+\usepackage[english]{babel} 
+\usepackage{mathpazo} % Palatino font
+
+% Figure captions
+\usepackage[font={small,it}]{caption}
+
+% enumeration
+\usepackage{enumerate}
+
+% Depth of the table of contents
+\setcounter{tocdepth}{2}
+
+% footnotes at the bottom of the page
+\usepackage[bottom]{footmisc} 
+
+%%%%%%%%% PAGES %%%%%%%%%%%%%%
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{3D Extraction Method Detecting Infants' Apnea}
+\fancyhead[RE,LO]{Final Report}
+\fancyfoot[CE,CO]{\leftmark}
+\fancyfoot[LE,RO]{\thepage}
+
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{1pt}
+
+% Begin the document
+\begin{document} %The document begins here
+
+% If this is an BEng project.
+\include{BEng_title_settings} % This command includes whatever is in the document title_settings.tex
+
+% Start the Table of Contents on a new page
+\newpage %create a new page
+
+\tableofcontents %Add a table of content
+
+\newpage
+
+%%%%% Abstract
+\abstract{Obstructive Sleeping Apnea (OSA) is a breathing disorder during sleep which may occur among all crowds. However, it would be a much severer disease for infants since they may not able to regain respiration by themselves, which may lead to a death. To diagnose OSA, Apnea–Hypopnoea Index (AHI) is used and an AHI larger than one will be considered abnormal for children. Biomedical image analysis, which is a field of machine learning techniques have been studied for many years for clinical diagnosis. Typically, existing biomedical images are used to build models and the machine could automatically tell if there is a disease. In this project, 3D images of infants' lungs will be used to build a model. Before building the model, the data should be pre-processed, which includes data clearing, transformation, feature extraction. Based on the research of respiration pattern of neonates, the data will be divided into pieces with appropriate time interval. Feature extraction is the most important part since the model need to studies the relevance of the features for different images. Convolutional neural network(CNN) will be used which could automatically extract the feature using convolutional theorem. For building the model, k-nearest neighbours (k-NN), support vector machine (SVM) and hidden Markov model(HMM) are popular algorithms which will be used. The pre-processed data are divided into training sets and testing sets where the training sets are input into the models. After training the models, the evaluation will be took place and different index will be took into account. The k-fold cross-validation method will be used for a more unbiased estimation.}
+
+% Write your abstract here between the brackets
+% Summarise your objectives
+% Summarise your Approach here
+% Summarise your main result here
+% Summarise the significance of your results here
+
+%%%%% Sections
+\section{Introduction} %Section creates sections starting from 1
+\label{introduction} %You can refer to a label anywhere in the text and the reader will be directed to the label, no matter how the paper changes.
+Obstructive Sleeping Apnea (OSA) is a common breathing disorder during sleep. It is characterized by recurrent episodes of complete or partial obstruction of the upper airway leading to reduced or absent breathing during sleep. OSA presents in 5\% of adults and 1\% of children in developed countries and it is an independent risk factor for diabetes, hypertension, myocardial infarction, and stroke. In addition, OSA in infants has been associated with failure to thrive, behavioural deficits, and sudden infant death.\cite{Katz2012}\\
+In clinical diagnosis, the severity of OSA is indicated by Apnea–Hypopnoea Index (AHI). It is represented by the number of apnea and hypopnea events per hour of sleep where the apnea must last for at least 10 seconds and be associated with a decrease in blood oxygenation. For children, an AHI larger than one will be considered abnormal. 
+To obtain the AHI, some physical data should be collected from the patients. Typically, polysomnography (PSG) is the most commonly used way for collecting data to calculate the AHI and help for diagnosis. It records cardio-circulatory signal like electrocardiogram (ECG),  neurophysiological signals, including electroencephalography (EEG),  electrooculographic (EOG) and electromyography (EMG), and respiratory signals including arterial oxygen saturation (SaO2), airflow at the mouth and nose, respiratory center drive and sound.\cite{Bloch1997} There have been previous studies about auto-diagnosing the OSA from PSG signals such as \cite{Song2016}, from single-lead ECG like the research in \cite{Feng2020}, or from SaO2 and other parameters like the research in \cite{Mencar2020}.\\
+Beyond that, Electrical impedance tomography (EIT) is widely used for disease diagnosis \cite{Fonseca2016}, especially lung cancer and adenocarcinoma. That is because electrical conductivity, permittivity, and impedance are used to form a tomographic image and since lung tissue conductivity is approximately five-fold lower than most other tissues within the human thorax, it results in high absolute contrast.\cite{doi:10.1080/0309190021000059687}There are many studies building models from EIT data of lung, like \cite{prabu2016performance} and \cite{rymarczykimplementing}. Since EIT performs well in building images for lung, it can also be used to monitor the OSA. Based on previous researches, in this project, 3D images from EIT are used to build the model. \\
+Since neonates' physiological structure is quite different different from adults', their respiration pattern are studied for many years. The frequency of normal respiration is about 48.8 times a minute studied in \cite{Mathew1985}. It is also mentioned in \cite{Fenner1973} that the mean duration of apnea of neonates was 6.9sec. Based on these researches, the diagnosis could be more accurate.\\
+Machine learning in 3D image analysis is a popular topic in the past decades. Auto-diagnosis of the diseases is the main topics. Typically, the procedure building a machine learning model for diagnosis including preprocessing the data, modelling, and evaluation. The raw image cannot be studied directly since there might be inaccurate records which needs to be cleaned from the dataset. In previous stuides, there is a technique FAst IMage registration (FAIM)\cite{Kuang2019} for image registration which transform the image as required and Fuzzy c-means (FCM) segmentation for both 2D and 3D images. It is mentioned in the previous job that some control point could be defined in the 3D images for processing.\cite{Shadi}.After that, several features should be extracted from the data for the model to study.\\
+Many useful algorithms for feature extraction are studied, such as the deep learning method convolutional neural networks (CNN) reviewed in \cite{singh20203d} and 3D U-Net \cite{Ronneberger2015}\cite{UNet2016} which is popular in medical image segmentation improved from fully convolutional network (FCN)\cite{long2015fully}. CNN uses convolutional technique which are widely used in image processing. It includes several convolution layers which automatically extract features from the input data, and pooling layers to simplify the output from the convolution layer. U-Net is a encoding-decoding structure, which includes contracting path which is several set constituting of two convolutional layers and one pooling layers, and  expansive path which has same number of sets constitute of two convolutional layers and one up-convolutional layers.  \\ 
+For building the models, there are existing algorithms in previous studies such as k-NN classification, support vector machine (SVM) \cite{ozdemir2016time}and hidden Markov model (HMM)\cite{song2015obstructive}. k-NN is a simple algorithm to fit the data in the appropriate class. Typically, using a fixed training set, the model will calculate the distance between every testing instance and all the training instances. The machine will then find the k nearest instances from the training set, and output the testing instance into the class with most number of training instances. SVM is a popular algorithm in biomedical image analysis. It generates a boundary between two different classes of the inputs in multi dimensional feature space. HMM could calculate the possibilities of the status of an instance based on known informations. Thus, it could output the most possible one as the predicted result.\\
+The models needs to be evaluated, to present its performance. Several index are specified for the evaluation in machine learning. In addition,rather than simply dividing the data in to training set and testing set, the k-fold cross-validation method are widely used to train the model for example the research in \cite{5424006} and \cite{7749468}. It generally results in a less biased or less optimistic estimate. In detail, it randomly divide the dataset into k groups, and for each group, it will be took as the test dataset with the remaining part being the training set. The performance them will then be evaluated with the parameters mentioned before, and the scores will be retained and summarized for use. Besides, the configuration of k is important. A small value of k may result in a biased estimate of the model, while a large value of k may lead to a waste of computing power. Typically, fivefold or tenfold are commonly used which will result in a estimation of low bias and a modest variance.
+
+
+\section{Goals and Objectives} \label{goals}
+
+The project aims to build a model to predict the apnea of neonates, based on analysing the 3D image of lungs. OSA is a harmful respiratory disorder which is one of the main reasons of developmental and functional impairment of the central nervous system and the brain for neonates. Thus, an accurate prediction could warn the physicians in advance and eliminate the effect for the neonates.
+\begin{enumerate}
+\item \textbf{Pre-processing}\\
+In this project, a machine learning technique is used to build the models. Before build the algorithms and the different models, the data should be pre-processed. Pre-processing steps include data cleaning, transformation, feature selection and sampling for modelling and validation.\\
+Since there are uninterpretable points, some filter will be found to eliminate the underlying abnormal values, which will be the data cleaning part. Besides, the 3D images are in time series and need to be divided into fragments. For transformation, the 3D images from EIT will be divided  by time. Based on the studies on the respiration pattern of neonates, the division can be applied with appropriate time interval. The segmentation of image should be done, using the existing models such as FCM. Feature selection will be the most important job in data pre-processing using CNN and 3D U-Net. Different features should be extracted for further training.\\
+After all the pre-processing, the data will be divided into two sets. One is the training set, taking 80\% or 90\% of the total data, which will be used to train the model, and the remaining part will be the testing set for evaluating the performance. \\
+\item \textbf{Building Models}\\
+In machine learning, data with selected features will be input to different algorithms to learn and train the models. Typically, Naïve Bayesian classification and k-NN classification are wildly used as simple models. Besides, SVM, HMM, and decision tree are also popular and performance well. Thus, several models will be trained using different numbers of features.\\
+In this stage of research, the configuration of indexes are important. The indexes includes the number of features input into the models, which is because some of the features extracted in the previous stage are non-significant, and the k in k-NN classification, since the complexity of the algorithm need to be balanced. The choice of the boundary to decide the class of data is also important. Thus, the model should be trained with different indexes and the output with best performance will be found. If the performance is bad, the indexes should be adjusted to optimize the result.\\
+Furthermore, the opinion of ensemble learning allows us to unite multiple models to obtain higher performance. Typically, ensemble learning includes bagging, boosting, stacking and blending, and random forests is one way which has good performance which will be used.\\
+\item \textbf{Evaluation}\\
+When the models are successfully built, their performance should be evaluated, as a vital representation of the result. The testing set will be input into the model without their labels, and the result will be compared to the known labels. Several index will be calculated, including accuracy, sensitivity, specificity, ROC and area under the ROC curve (AUC). Having these index, the performance of our model can be compared with others' researches. The meaning and calculation of the indexes are explained in detail below.
+\begin{itemize}
+\item Accuracy is the number of correctly predicted data points out of all the data points. More formally, it is defined as the number of true positives and true negatives divided by the number of true positives, true negatives, false positives, and false negatives. \\
+\item Sensitivity is a measure of the proportion of actual positive cases that got predicted as positive (or true positive). Sensitivity is also termed as Recall. This implies that there will be another proportion of actual positive cases, which would get predicted incorrectly as negative (and, thus, could also be termed as the false negative).\\
+\item Specificity is defined as the proportion of actual negatives, which got predicted as the negative (or true negative). This implies that there will be another proportion of actual negative, which got predicted as positive and could be termed as false positives. This proportion could also be called a false positive rate. Specificity = (True Negative)/(True Negative + False Positive)\\
+\item An ROC curve (receiver operating characteristic curve) is a graph of true positive rate (TPR) verses false positive rate (FPR) TPR= (True Positive)/(True Positive + False Negative) FPR =(False Positive)/(False Positive + True Negative)\\
+\item AUC measures the entire two-dimensional area underneath the entire ROC curve (think integral calculus) from (0,0) to (1,1).\\
+
+\end{itemize}
+After building the models, to obtain a unbiased estimation of the performance, tenfold cross-validation will be used in this research. The data will be shuffled and randomly separated into ten groups. One of the group will be the testing set and the remaining part are training sets. The model will then be trained and evaluated. The procedure will be repeated for all the ten sets and gives the final result.\\
+\item \textbf{Timing analysis}\\
+A gantt chart is shown below indicating the proposed time for different tasks to achieve the goal.
+\begin{figure}[h] 
+\centering
+\includegraphics[width=\textwidth]{SampleGanttChart.png} 
+\caption{This is a sample Gantt Chart. You can find out how to make one on-line.}
+\label{Fig:GanttChart}
+\end{figure} 
+\end{enumerate}
+
+ 
+ % Write here your text
+\newpage
+\section{Preliminary Assessment of Risks} 
+\label{sec:RiskAssessment}
+\begin{itemize}
+\item{\textbf{Safety Risks}:\\
+Since this project is a programming job, where all tasks are implemented on a computer, only a few safety issues may occurs.\\}
+\begin{tabular}{p{2.2cm}p{5cm}p{1.2cm}p{2cm}}
+\hline  
+Risk&Detail&Risk Level&Control\\
+\hline 
+Eye strain&Since all tasks are implemented on a computer and the researcher will stare at the screen for a long time, the researcher may get a eye strain.&Low&Set a clock for regular breaks form the work\\
+\hline
+Lone working&Due to the coronavirous, there is no face-to-face activities during the research. Besides, the programming project does not requires the researcher to be in the laboratory. Thus, working alone may causes psychological illness.&Low&Arranging a regular meeting with the supervisor to avoid feeling alone.\\
+\hline
+\end{tabular}
+\newpage
+\item{\textbf{Failure Risks}: \\
+There are many possible risks which could lead to the failure of the project listed below. Appropriate control should be applied to avoid such risks.\\
+\begin{tabular}{p{2.2cm}p{5cm}p{1.2cm}p{2cm}}
+\hline  
+Risk&Detail&Risk Level&Control\\
+\hline 
+Bias&Bias can be introduced in many ways and can cause models to be wildly inaccurate. Lack of consideration in pre-processing the data may cause a bias.&Medium&Pre-processing the data and avoid one kind of data to be too many\\
+\hline
+Data&Since machine learning requires a large amount of dataset, not having enough data can bring enormous risk to the modeling process. Bad data will also lead to failure, so we need to implement data cleaning.&Medium&Clear the data carefully to avoid the existence of bad data\\
+\hline 
+Over-Optimization&When building models, we may over-estimate the performance. We may be failed when building models and the accuracy may be low. The model may be lack of variability so it may performance well in one dataset and bad in another.&High&Use k-folder cross-validation to avoid the over-optimization or the bias.\\
+\hline  
+Output \newline{interpretation}&How to use and interpret the model can be a huge risk. A bad evaluation way may lead to a failure.&Low&Use variable indexes to evaluate the performance\\
+\hline  
+Data \newline{destruction}&Since the project takes several months to be implemented, the data might be destroyed with unpredictable reasons.&High&Use GitHub to backup the code. Upload the data regularly.\\
+\hline  
+\end{tabular}
+}
+\end{itemize}
+
+\newpage
+\bibliographystyle{ieeetran} %style of the bibliography. You can look for other styles online
+\bibliography{export}%prints the bibliography by writing its name in the brackets
+
+% For IOS, download BibDesk from the following link: https://bibdesk.sourceforge.io/
+
+%For Windows, Mac or Linux download Mendeley from the following link: https://www.mendeley.com/download-desktop-new?mboxSession=455e210fe7164ae5be72907cf43d80b0&adobe_mc_sdid=SDID%3D1771E6E0BD7935A0-1E92E999E8893227%7CMCORGID%3D4D6368F454EC41940A4C98A6%40AdobeOrg%7CTS%3D1583323671&adobe_mc_ref=https%3A%2F%2Fwww.google.com%2F
+
+%For Windows, Mac or Linux download JabRef from the following link: https://www.jabref.org/
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
