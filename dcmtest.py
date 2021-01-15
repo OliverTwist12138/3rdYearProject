@@ -4,6 +4,19 @@ import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
 
+
+
+
+def sample_stack(stack, rows=5, cols=4):
+    fig,ax = plt.subplots(rows,cols,figsize=[12,12])
+    for i in range(rows*cols):
+
+        ax[int(i/rows),int(i % rows)].set_title('slice %d' % i)
+        ax[int(i/rows),int(i % rows)].imshow(stack[:,:,i],cmap='gray')
+        ax[int(i/rows),int(i % rows)].axis('off')
+    plt.show()
+sample_stack(imgs_to_process)
+
 def plot_scan(images):
     #plot the 2D slices
     for image in images:
@@ -29,6 +42,16 @@ def make3D(image, threshold = -400):
     ax.set_ylim(0, image.shape[1])
     ax.set_zlim(0, image.shape[2])
     plt.show()
+
+'''
+[
+[[913][913]...(32)...[913]]
+...
+(32)
+...
+[[913][913]...(32)...[913]]
+]
+'''
 
 def enterfolder(path):
     return path + "/" + os.listdir(path)[0]
