@@ -17,7 +17,8 @@ def saveCubes(mat,fileName,m):
                         path = '/home/zceeyan/project/3Ddataset/validation/'
                 else:
                         path = '/home/zceeyan/project/3Ddataset/training/'
-                name = path + 'nonapnea/'+fileName.split('/')[-1].split('.')[0]+"_"+str(i)+'.npy'
+
+                name = path + 'apnea/'+fileName.split('/')[-1].split('.')[0]+"_"+str(i)+'.npy'
                 np.save(name,block)
 
 
@@ -29,13 +30,16 @@ def readFile():
         if re.search(r'^P', file) != None:
             filePath = path + '/' + file
             patientNumber = int(filePath[-2:])
-            for i in range(10):
-                fileName = filePath + "/PT" + str(patientNumber) + 'A' + str(i) + '_Post.mat'
+
+            for i in range(1,100):
+                fileName = filePath + "/PT" + str(patientNumber) + 'A' + str(i) + '_During.mat'
                 if os.path.isfile(fileName):
                     mat = scipy.io.loadmat(fileName)
-                saveCubes(mat, fileName, m)
-                print(fileName)
-                m += 1
+                    saveCubes(mat, fileName, m)
+                    print(fileName)
+                    m += 1
+                else:
+                    break
 
 def main():
         readFile()

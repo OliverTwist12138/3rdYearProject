@@ -5,6 +5,13 @@ from tensorflow import keras
 from tensorflow.keras import layers
 from scipy import ndimage
 import random
+import os
+os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
+def deleteElements(list, difference):
+    for i in range(difference):
+        list.pop(random.randrange(0,len(list)))
+
 def prepare(path):
     apnea_paths = [
         os.path.join(os.getcwd(), path+'apnea/' , x)
@@ -18,16 +25,18 @@ def prepare(path):
 
     print("Apnea samples: " + str(len(apnea_paths)))
     print("Nonapnea Samples: " + str(len(nonapnea_paths)))
-
+    difference = abs(len(apnea_paths)-len(nonapnea_paths))
+    if len(apnea_paths)>len(nonapnea_paths):
+        deleteElements(apnea_paths,difference)
+    else:
+        deleteElements(nonapnea_paths,difference)
     apnea = np.array([np.load(path) for path in apnea_paths])
     nonapnea = np.array([np.load(path) for path in nonapnea_paths])
-
     apnea_labels = np.array([1 for _ in range(len(apnea))])
     nonapnea_labels = np.array([0 for _ in range(len(nonapnea))])
 
     x = np.concatenate((apnea, nonapnea), axis=0).astype(np.float32)
     y = np.concatenate((apnea_labels, nonapnea_labels), axis=0)
-    print(x.dtype,y.dtype)
     return x, y
 
 @tf.function
@@ -65,7 +74,7 @@ def dataLoader(x_train, y_train, x_val, y_val):
     train_loader = tf.data.Dataset.from_tensor_slices((x_train, y_train))
     validation_loader = tf.data.Dataset.from_tensor_slices((x_val, y_val))
 
-    batch_size = 2
+    batch_size = 8
     # Augment the on the fly during training.
     train_dataset = (
         train_loader.shuffle(len(x_train))
@@ -99,12 +108,11 @@ def get_model(width=32, height=32, depth=20):
     x = layers.Conv3D(filters=32, kernel_size=3, activation="relu")(x)
     x = layers.MaxPool3D(pool_size=(2,2,1))(x)
     x = layers.BatchNormalization()(x)
-
-    x = layers.GlobalAveragePooling3D()(x)
-    x = layers.Dense(units=64, activation="relu")(x)
-    x = layers.Dropout(0.3)(x)
-
-    outputs = layers.Dense(units=1, activation="relu")(x)
+    x = layers.GlobalMaxPool3D()(x)
+    x = layers.Dense(units=128, activation="relu")(x)
+    x = layers.Dropout(0.25)(x)
+    x = layers.Dense(units=128, activation="relu")(x)
+    outputs = layers.Dense(units=1, activation='sigmoid')(x)
 
     # Define the model.
     model = keras.Model(inputs, outputs, name="3dcnn")
@@ -129,7 +137,7 @@ def main():
         initial_learning_rate, decay_steps=100000, decay_rate=0.96, staircase=True
     )
     model.compile(
-        loss="binary_crossentropy",
+        loss="categorical_crossentropy",
         optimizer=keras.optimizers.Adam(learning_rate=lr_schedule),
         metrics=["acc"],
     )
@@ -140,14 +148,16 @@ def main():
         "./model/3d_image_classification.h5", save_best_only=True
     )
     early_stopping_cb = keras.callbacks.EarlyStopping(monitor="val_acc", patience=15)
+    keras.callbacks.EarlyStopping(monitor='val_loss', patience=10)
     '''
     my_callbacks = [
         keras.callbacks.ModelCheckpoint("./model/3d_image_classification.h5", save_best_only=True),
-        keras.callbacks.EarlyStopping(monitor="val_acc", patience=15)
+        keras.callbacks.CSVLogger('training.log'),
+        keras.callbacks.EarlyStopping(monitor='val_acc', patience=10)
     ]
     # Train the model, doing validation at the end of each epoch
     epochs = 100
-    model.fit(
+    history = model.fit(
         train_dataset,
         validation_data=validation_dataset,
         epochs=epochs,
@@ -155,5 +165,8 @@ def main():
         verbose=1,
         callbacks=my_callbacks,
     )
+    import pickle
+    with open('./models/history.pkl', 'wb') as file_pi:
+        pickle.dump(history.history, file_pi)
 if __name__ == '__main__':
     main()

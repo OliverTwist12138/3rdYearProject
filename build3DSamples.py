@@ -18,7 +18,6 @@ compositValue = measurement[0,0][1]
 print(measurement)
 '''
 '''
-
 for i in range(len(compositValue)):
         print(compositValue[i])
         length = len(compositValue[i])

@@ -1,11 +1,11 @@
 import numpy as np
 import os
-path = '/home/zceeyan/project/3Ddataset/'
+path = '/home/zceeyan/project/3Ddataset/samples'
 def normalization(images,folderPath, i, filename):
     max = np.amax(images)
     min = np.amin(images)
     images_normalized = (images-min)/(max-min)
-    filename = path + 'normalized/'+ folderPath + '/' + i + filename
+    filename = '/home/zceeyan/project/3Ddataset/normalized/'+ folderPath + '/' + i + filename
     np.save(filename,images_normalized)
 
 def readFile():
