@@ -12,11 +12,11 @@ def saveCubes(mat,fileName,m):
         for i in range(r):
                 block = compositValue[:,:,(10+20*i):(30+20*i)]
                 if m == 6:
-                        path = '/home/zceeyan/project/3Ddataset/testing/'
+                        path = '/home/zceeyan/project/3Ddataset/samples/testing/'
                 elif m == 5:
-                        path = '/home/zceeyan/project/3Ddataset/validation/'
+                        path = '/home/zceeyan/project/3Ddataset/samples/validation/'
                 else:
-                        path = '/home/zceeyan/project/3Ddataset/training/'
+                        path = '/home/zceeyan/project/3Ddataset/samples/training/'
 
                 name = path + 'apnea/'+fileName.split('/')[-1].split('.')[0]+"_"+str(i)+'.npy'
                 np.save(name,block)
@@ -29,17 +29,15 @@ def readFile():
     for file in files:
         if re.search(r'^P', file) != None:
             filePath = path + '/' + file
-            patientNumber = int(filePath[-2:])
-
-            for i in range(1,100):
-                fileName = filePath + "/PT" + str(patientNumber) + 'A' + str(i) + '_During.mat'
-                if os.path.isfile(fileName):
+            samplefiles = os.listdir(filePath)
+            for samples in samplefiles:
+                if re.search('_During',samples):
+                    fileName = filePath + '/' + samples
                     mat = scipy.io.loadmat(fileName)
                     saveCubes(mat, fileName, m)
                     print(fileName)
-                    m += 1
-                else:
-                    break
+            m += 1
+
 
 def main():
         readFile()
